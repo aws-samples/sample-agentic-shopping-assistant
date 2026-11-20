@@ -1,0 +1,19 @@
+[project]
+name = "gateway-interceptor"
+version = "0.1.0"
+description = "AgentCore Gateway REQUEST interceptor (header forwarding)"
+requires-python = ">=3.13"
+# No runtime dependencies: stdlib only, keeps cold start minimal.
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest>=8.4.1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = [".", "src"]
+addopts = ["-v", "--tb=short", "--disable-warnings"]
+
+[tool.ruff]
+line-length = 120

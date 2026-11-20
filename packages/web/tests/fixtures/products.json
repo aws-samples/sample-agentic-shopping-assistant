@@ -1,0 +1,38 @@
+[
+  {
+    "id": "sample-1",
+    "productDisplayName": "겨울 자켓 Winter Jacket",
+    "gender": "Men",
+    "masterCategory": "Apparel",
+    "subCategory": "Topwear",
+    "articleType": "Topwear",
+    "baseColour": "Blue",
+    "season": "Winter",
+    "year": 2026,
+    "usage": "Casual"
+  },
+  {
+    "id": "sample-2",
+    "productDisplayName": "Cotton Shirt",
+    "gender": "Women",
+    "masterCategory": "Apparel",
+    "subCategory": "Topwear",
+    "articleType": "Topwear",
+    "baseColour": "Blue",
+    "season": "Summer",
+    "year": 2026,
+    "usage": "Casual"
+  },
+  {
+    "id": "sample-3",
+    "productDisplayName": "Running Shoes",
+    "gender": "Unisex",
+    "masterCategory": "Footwear",
+    "subCategory": "Shoes",
+    "articleType": "Shoes",
+    "baseColour": "Blue",
+    "season": "Spring",
+    "year": 2026,
+    "usage": "Casual"
+  }
+]

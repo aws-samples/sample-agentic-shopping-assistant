@@ -1,0 +1,30 @@
+version: 0.2
+
+# Build the aria `agent`, `api` and `indexer` images in AWS CodeBuild — an alternative
+# to a local Docker/Finch runtime or a Docker-in-Docker CI runner. It runs
+# scripts/build_images.py, which builds linux/arm64 images and saves them to
+# artifacts/{agent,api,indexer}.tar plus artifacts/release.json.
+# It does NOT push; publish or scan the tarballs downstream.
+#
+# The CodeBuild project must be configured with:
+#   - privilegedMode: true                     (Docker daemon for image builds)
+#   - an ARM64 environment image, e.g.
+#       aws/codebuild/amazonlinux-aarch64-standard:3.0   (images are linux/arm64)
+# See docs/guides/release.md.
+
+env:
+  variables:
+    CONTAINER_ENGINE: docker
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.13
+  build:
+    commands:
+      - python3 scripts/build_images.py
+
+artifacts:
+  name: aria-images
+  files:
+    - artifacts/**/*

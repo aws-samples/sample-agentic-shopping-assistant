@@ -1,0 +1,25 @@
+[project]
+name = "aria-catalog"
+version = "0.1.0"
+description = "Catalog search from a catalog definition, shared by the agent's search tool, the indexer and the sample Gateway target"
+requires-python = ">=3.13"
+dependencies = ["boto3>=1.43.0", "opensearch-py>=3.0.0"]
+
+[dependency-groups]
+dev = ["pytest>=8.4.1"]
+
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aria_catalog"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = ["src"]
+addopts = ["-v", "--tb=short", "--disable-warnings"]
+
+[tool.ruff]
+line-length = 120

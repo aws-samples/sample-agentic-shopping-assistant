@@ -1,0 +1,42 @@
+[project]
+name = "agent"
+version = "0.1.0"
+description = "ARIA shopping assistant on Bedrock AgentCore Runtime"
+requires-python = ">=3.13"
+dependencies = [
+  "aria-catalog",
+  "aria-contracts",
+  "aws-opentelemetry-distro>=0.12.0",
+  "bedrock-agentcore>=1.20.0",
+  "boto3>=1.43.0",
+  "mcp>=1.0.0",
+  "strands-agents[otel]>=1.55.1",
+  "structlog>=25.4.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.4.1", "pytest-asyncio>=1.1.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+pythonpath = [".", "src"]
+addopts = ["-v", "--tb=short", "--strict-markers", "--disable-warnings"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+
+[tool.pyright]
+include = ["src"]
+exclude = ["**/__pycache__", ".venv"]
+reportMissingImports = "error"
+reportMissingTypeStubs = false
+venvPath = "."
+venv = ".venv"
+
+[tool.uv.sources]
+aria-catalog = { path = "../catalog", editable = true }
+aria-contracts = { path = "../contracts", editable = true }

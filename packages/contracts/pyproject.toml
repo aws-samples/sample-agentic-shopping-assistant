@@ -1,0 +1,21 @@
+[project]
+name = "aria-contracts"
+version = "0.1.0"
+description = "Shared identity, session and turn-event wire contract for the API and agent; no AWS operations"
+requires-python = ">=3.13"
+
+[dependency-groups]
+dev = ["pytest>=8.4.1"]
+
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = ["src"]
+addopts = ["-v", "--tb=short", "--disable-warnings"]
+
+[tool.ruff]
+line-length = 120

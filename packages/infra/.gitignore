@@ -1,0 +1,2 @@
+# CDK asset staging; cdk.out/ and .toml are ignored at the repository root.
+.cdk.staging/

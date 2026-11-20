@@ -1,0 +1,7 @@
+{
+  "python-runtime": "public.ecr.aws/chainguard/python@sha256:e1a792bc1e72e6395fbf0504bd040945df8999e3e0b22728c279767f771a04ee",
+  "python-builder": "public.ecr.aws/chainguard/python@sha256:466bed9745baea18d220d1d048439d9daaa72ace864cfbaffe48ce4e096c0da9",
+  "aws-observability/aws-otel-collector": "public.ecr.aws/aws-observability/aws-otel-collector@sha256:7968fb60db6a2390a47ba6a2df029745638486e285c9b2487da1b722d0855a3e",
+  "uv": "0.12.14",
+  "trivy": "aquasec/trivy@sha256:62b1e65e8869bc4b4c6aa4fa2b21595256c7c2f6018a9d9ad61caf87187c1969"
+}

@@ -1,0 +1,31 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Order status (example)",
+    "version": "1.0.0",
+    "description": "An example customer API for docs/guides/gateway-onboarding.md. Each operationId becomes a Gateway tool. The shopper arrives as the x-aria-actor-id request header, which the Gateway adds; it is deliberately not a declared parameter, which the model would fill in."
+  },
+  "servers": [{ "url": "https://orders.example.com" }],
+  "paths": {
+    "/orders": {
+      "get": {
+        "operationId": "listRecentOrders",
+        "summary": "The shopper's most recent orders",
+        "parameters": [
+          { "name": "limit", "in": "query", "required": false, "schema": { "type": "integer", "minimum": 1, "maximum": 20 } }
+        ],
+        "responses": { "200": { "description": "Orders, newest first" } }
+      }
+    },
+    "/orders/{orderId}": {
+      "get": {
+        "operationId": "getOrderStatus",
+        "summary": "Status and delivery estimate for one order",
+        "parameters": [
+          { "name": "orderId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "The order's status" }, "404": { "description": "No such order for this shopper" } }
+      }
+    }
+  }
+}

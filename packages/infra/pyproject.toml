@@ -1,0 +1,28 @@
+[project]
+name = "infra"
+version = "0.1.0"
+description = "CDK infrastructure for the ARIA shopping assistant on Bedrock AgentCore"
+requires-python = ">=3.13"
+dependencies = [
+  "aria-catalog",
+  "aws-cdk-lib>=2.221.0",
+  "cdk-nag>=2.37.55",
+  "constructs>=10.4.2",
+  "pydantic>=2.9",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.4.1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = ["."]
+addopts = ["-q", "--tb=short", "--disable-warnings"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.uv.sources]
+# The catalog definition: the loader validates it at synth, and the stacks pass it on.
+aria-catalog = { path = "../catalog", editable = true }

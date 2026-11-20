@@ -1,0 +1,8 @@
+# Python build and coverage output. Caches and virtual environments are ignored at the root.
+build/
+dist/
+*.egg-info/
+.coverage
+htmlcov/
+.mypy_cache/
+.envrc

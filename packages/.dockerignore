@@ -1,0 +1,20 @@
+**/.venv
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+**/.env
+**/.env.*
+**/env
+**/.toml
+**/.DS_Store
+**/.output
+**/dist
+infra
+web
+mcp-servers
+# Never copied into an image. Excluding them keeps raw dataset-eval results
+# (agent/evals/results restates conversations) out of the build context and the
+# cloud assembly, and stops test or eval edits from changing the image hash.
+agent/evals
+**/tests
+**/.python-version

@@ -1,0 +1,115 @@
+[app]
+ns = "ARIA"
+stage = "Dev"
+
+# [vpc]
+# vpcId = "vpc-xyz"
+
+[buildEnvironment]
+cpuArchitecture = "ARM64" # ARM64 or X86_64
+
+[runtime]
+modelId = "global.openai.gpt-5.6-luna"
+# Alternatives (Bedrock global inference profiles):
+#   global.anthropic.claude-haiku-4-5-20251001-v1:0   # Claude Haiku 4.5
+#   global.openai.gpt-5.6-terra                        # GPT 5.6 Terra
+maxTokens = 2048
+temperature = 0.3
+# Session lifecycle: containers are recycled after idle/max lifetime.
+idleSessionTimeout = 900
+maxLifetime = 3600
+# The Runtime always runs in the VPC's private subnets, which must be in Availability
+# Zones AgentCore supports; scripts/preflight.py checks them.
+
+# AgentCore Memory. Short-term memory, the conversation events, is always on:
+# conversations survive an idle Runtime session and appear in the history.
+# `longTerm` also extracts the strategies below and retrieves them into each turn
+# (off by default; it keeps derived data about each shopper). If longTerm is on,
+# at least one strategy must be enabled. Toggling it updates Memory in place.
+[memory]
+longTerm = false
+eventExpiryDays = 90
+topK = 5
+relevanceScore = 0.3
+[memory.strategies]
+semantic = true        # user_facts
+summarization = true   # conversation_summaries
+userPreference = true  # user_preferences
+
+[api]
+allowIpList = ["127.0.0.1/32"]
+serverPort = 8000
+# WAF blocks a client IP after this many requests in 5 minutes. Shoppers behind one NAT
+# share an IP; the WafRateLimitBlocks alarm reports blocks.
+wafRateLimit = 100
+
+# AgentCore Policy — Cedar authorization on Gateway tool calls.
+# Cedar is default-deny: an incorrect policy set in ENFORCE mode removes the
+# agent's tools entirely. Deploy in LOG_ONLY, read the decision logs, then
+# switch. The saved-items sample's policies live in components/policies/sample/;
+# each customer target names its own template under components/policies/ in
+# policyFile, which ENFORCE requires.
+[policy]
+enabled = false
+mode = "LOG_ONLY" # LOG_ONLY | ENFORCE
+
+# AgentCore Evaluations — continuous scoring of live agent traffic.
+# Off by default: every sampled session spends judge-model tokens.
+# Requires Transaction Search to be ACTIVE:
+#   aws xray get-trace-segment-destination
+[evaluations]
+enabled = false
+# 0.01–100. Start low on live traffic; raise when chasing a regression.
+samplingPercentage = 10.0
+sessionTimeoutMinutes = 15
+judgeModelId = "global.anthropic.claude-haiku-4-5-20251001-v1:0"
+# Swap freely. Max 10 evaluators total, including custom ones.
+# Full catalogue: aws bedrock-agentcore-control list-evaluators --region <region>
+builtinEvaluators = [
+  "Builtin.ToolSelectionAccuracy",
+  "Builtin.ToolParameterAccuracy",
+  "Builtin.GoalSuccessRate",
+  "Builtin.Faithfulness",
+  "Builtin.InstructionFollowing",
+]
+# Deploys the example catalogue-grounding evaluator from
+# components/evaluators.py. Set false to run built-ins only.
+includeExampleCustomEvaluator = true
+
+# Product search is a local tool in the agent: fixture | opensearch | http | disabled.
+[tools.productSearch]
+provider = "fixture"
+openSearchIndex = "products"
+# opensearch and http read your catalog definition, a TOML file relative to this one; start from a
+# copy of packages/catalog/src/aria_catalog/example/catalog.toml. Empty uses that example.
+# catalogFile = "catalog.toml"
+
+# Bedrock Guardrail on the agent's model calls. ENFORCE blocks matched content;
+# AUDIT reports matches in the trace without blocking. enabled=false removes it
+# entirely (forbidden in prod).
+[guardrail]
+enabled = true
+mode = "ENFORCE" # AUDIT | ENFORCE
+# sync | async. Dev streams replies while the guardrail checks them, so first text comes
+# sooner than with sync (1.56 s on Dev; docs/design-docs/streaming-and-latency.md); filtered
+# content can show briefly before the stream is cut.
+streamProcessing = "async"
+
+[auth]
+provider = "cognito"
+# Shopper MFA with an authenticator app: off | optional | required. Optional asks for a code
+# only from a shopper who has registered one; required makes every shopper register one.
+mfa = "optional"
+
+# managed: provision the Gateway and its targets here.
+# external: point at an existing Gateway (set endpoint + allowedTools).
+# disabled: no Gateway — the agent runs with its local tools only. Requires
+#   policy.enabled=false.
+[gateway]
+mode = "managed"
+# Sample Gateway target that needs the shopper's identity: get_saved_items.
+savedItemsSample = true
+# Custom non-credential headers propagated client -> Runtime -> agent -> Gateway
+# -> target (allowlisted on the Runtime and forwarded by the interceptor). Never
+# put Authorization here: the shopper's token never leaves the agent (docs/design-docs/identity-and-tokens.md).
+# forwardHeaders = ["x-tenant-id", "x-locale"]

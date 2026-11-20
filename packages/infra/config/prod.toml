@@ -1,0 +1,50 @@
+# Replace example account, DNS names, CIDRs and resource ARNs before deployment.
+[app]
+ns = "ARIA"
+stage = "Prod"
+account = "123456789012"
+region = "ap-northeast-2"
+[buildEnvironment]
+cpuArchitecture = "ARM64"
+[runtime]
+modelId = "global.openai.gpt-5.6-luna"
+# Short-term memory (conversation events) is always on. Turn long-term memory on
+# only after a privacy review: it keeps derived preferences and facts per shopper.
+[memory]
+longTerm = false
+[auth]
+provider = "cognito"
+# Shopper MFA with an authenticator app: off | optional | required. Required makes every
+# shopper register one at sign-in.
+mfa = "optional"
+callbackUrls = ["https://shop.example.com/auth/callback"]
+logoutUrls = ["https://shop.example.com/"]
+[api]
+# Each entry /8 or longer (IPv6: /32). A broader one, such as 0.0.0.0/0, also needs
+# allowPublicIngress = true.
+allowIpList = ["203.0.113.0/24"]
+certificateArn = "arn:aws:acm:ap-northeast-2:123456789012:certificate/REPLACE"
+corsAllowOrigins = ["https://shop.example.com"]
+minTasks = 2
+maxTasks = 6
+# Your catalog: http, an HTTPS search API, or opensearch, the domain this app creates in the VPC.
+# Prod rejects fixture, the committed sample catalog.
+[tools.productSearch]
+provider = "http"
+endpoint = "https://catalog.example.com/search"
+# Your catalog definition (TOML), relative to this file; empty uses the packaged example's.
+# catalogFile = "catalog.toml"
+# secretArn = "arn:aws:secretsmanager:ap-northeast-2:123456789012:secret:REPLACE"
+[policy]
+enabled = true
+mode = "ENFORCE"
+[guardrail]
+enabled = true
+mode = "ENFORCE"
+# sync | async. sync checks each reply before it streams; async answers sooner but can show
+# filtered content briefly before the stream is cut.
+streamProcessing = "sync"
+[operations]
+alarmTopicArn = "arn:aws:sns:ap-northeast-2:123456789012:REPLACE"
+[evaluations]
+enabled = false

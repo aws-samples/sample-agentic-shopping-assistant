@@ -1,0 +1,65 @@
+{
+  "scenarios": [
+    {
+      "scenario_id": "winter-jacket-men",
+      "turns": [
+        {
+          "input": "남성용 겨울 자켓 추천해 주세요."
+        }
+      ],
+      "expected_trajectory": ["search_products"],
+      "assertions": [
+        "The agent calls product search with season Winter and gender Men before recommending anything",
+        "Every product the agent names appears in the product search results",
+        "The agent replies in Korean"
+      ],
+      "metadata": {"tags": ["search", "structured-filters"]}
+    },
+    {
+      "scenario_id": "women-winter-boots",
+      "turns": [
+        {
+          "input": "여성용 겨울 부츠 있나요?"
+        }
+      ],
+      "expected_trajectory": ["search_products"],
+      "assertions": [
+        "The agent searches with season Winter, gender Women and category Footwear",
+        "If the search returns no products, the agent says so instead of suggesting an item",
+        "Every product the agent names appears in the product search results"
+      ],
+      "metadata": {"tags": ["search", "grounding"]}
+    },
+    {
+      "scenario_id": "spring-sneakers-follow-up",
+      "turns": [
+        {
+          "input": "봄에 신을 운동화 보여주세요."
+        },
+        {
+          "input": "첫 번째 신발은 무슨 색이에요?"
+        }
+      ],
+      "expected_trajectory": ["search_products"],
+      "assertions": [
+        "On the first turn, the agent searches for spring footwear",
+        "On the follow-up, the agent gives the colour stated in the earlier search result instead of guessing"
+      ],
+      "metadata": {"tags": ["search", "multi-turn"]}
+    },
+    {
+      "scenario_id": "off-topic-weather",
+      "turns": [
+        {
+          "input": "오늘 서울 날씨 어때요?",
+          "expected_response": "죄송합니다. 온라인 쇼핑 관련 문의만 도와드릴 수 있습니다. 쇼핑과 관련해 도와드릴 일이 있을까요?"
+        }
+      ],
+      "assertions": [
+        "The agent does not call product search",
+        "The agent politely declines because the request is not about shopping"
+      ],
+      "metadata": {"tags": ["scope"]}
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+[project]
+name = "saved-items-lambda"
+version = "0.1.0"
+description = "Sample AgentCore Gateway Lambda target that needs the shopper's identity"
+requires-python = ">=3.13"
+# The deployed function bundles only its handler and the aria_catalog package, whose example
+# catalog it samples (see gateway_stack.py).
+dependencies = ["aria-catalog"]
+
+[tool.uv.sources]
+aria-catalog = { path = "../../catalog", editable = true }
+
+[dependency-groups]
+dev = ["pytest>=8.4.1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = [".", "src"]
+addopts = ["-v", "--tb=short", "--disable-warnings"]
+
+[tool.ruff]
+line-length = 120

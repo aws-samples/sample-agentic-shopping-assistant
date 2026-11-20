@@ -1,0 +1,31 @@
+[project]
+name = "api"
+version = "0.1.0"
+description = "Web-facing API in front of the AgentCore Runtime"
+requires-python = ">=3.13"
+dependencies = [
+  "aria-contracts",
+  "aws-opentelemetry-distro==0.23.0",
+  "boto3>=1.43.0",
+  "fastapi>=0.116.1",
+  "httpx>=0.28,<1",
+  "pyjwt[crypto]>=2.15.1,<3",
+  "structlog>=25.4.0",
+  "uvicorn>=0.35.0",
+]
+
+[dependency-groups]
+dev = ["httpx>=0.27", "pytest>=8.4.1", "pytest-asyncio>=1.1.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = [".", "src"]
+addopts = ["-q", "--tb=short", "--disable-warnings"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 120
+
+[tool.uv.sources]
+aria-contracts = { path = "../contracts", editable = true }

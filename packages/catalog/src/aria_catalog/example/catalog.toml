@@ -1,0 +1,109 @@
+# The NORDLY example catalog definition: a synthetic fashion store.
+#
+# The fixture provider searches products.json, next to this file, with it, and the example
+# OpenSearch index is built from it. Copy it as the starting point for your own catalog.
+# The field reference is in aria_catalog/definition.py.
+
+[catalog]
+name = "NORDLY"
+description = "Search fashion products in the NORDLY catalog. Use this tool only for searching products."
+idField = "sku"
+analyzer = "nori"
+
+[[catalog.fields]]
+name = "sku"
+type = "keyword"
+description = "Product ID"
+
+[[catalog.fields]]
+name = "title"
+type = "text"
+search = true
+boost = 3
+description = "Product name, in Korean and English"
+
+[[catalog.fields]]
+name = "description"
+type = "text"
+search = true
+description = "Short product description, in Korean"
+
+[[catalog.fields]]
+name = "season"
+type = "keyword"
+filter = true
+values = ["Summer", "Fall", "Winter", "Spring"]
+description = "Target season"
+
+[[catalog.fields]]
+name = "gender"
+type = "keyword"
+filter = true
+values = ["Men", "Women", "Unisex", "Boys", "Girls"]
+description = "Target gender"
+
+[[catalog.fields]]
+name = "category"
+parameter = "category1"
+type = "keyword"
+filter = true
+values = ["Apparel", "Accessories", "Footwear", "Personal Care", "Free Items", "Sporting Goods", "Home"]
+description = "Top-level category"
+
+[[catalog.fields]]
+name = "subcategory"
+parameter = "category2"
+type = "keyword"
+filter = true
+values = [
+  "Topwear", "Shoes", "Bags", "Bottomwear", "Watches", "Innerwear", "Jewellery", "Eyewear", "Fragrance",
+  "Sandal", "Wallets", "Flip Flops", "Belts", "Socks", "Lips", "Dress", "Loungewear and Nightwear", "Saree",
+  "Nails", "Makeup", "Headwear", "Ties", "Accessories", "Scarves", "Cufflinks", "Apparel Set", "Free Gifts",
+  "Stoles", "Skin Care", "Skin", "Eyes", "Mufflers", "Shoe Accessories", "Sports Equipment", "Gloves", "Hair",
+  "Bath and Body", "Water Bottle", "Perfumes", "Umbrellas", "Beauty Accessories", "Wristbands",
+  "Sports Accessories", "Home Furnishing", "Vouchers",
+]
+description = "Sub-category within category1. Jackets and coats are Topwear; sneakers, running shoes and boots are Shoes"
+
+[[catalog.fields]]
+name = "type"
+type = "keyword"
+description = "Article type, such as Jackets or Sneakers"
+
+[[catalog.fields]]
+name = "colour"
+type = "keyword"
+description = "Main colour"
+
+[[catalog.fields]]
+name = "year"
+type = "integer"
+filter = true
+description = "Release year, e.g. 2025."
+
+[[catalog.fields]]
+name = "usage"
+type = "keyword"
+filter = true
+values = ["Casual", "Smart Casual", "Formal", "Sports", "Travel", "Party", "Home"]
+description = "Occasion the product is made for"
+
+[catalog.embedding]
+text = "{title}. {description}"
+model = "global.cohere.embed-v4:0"
+
+# Every product.v1 card field, each from a catalog field.
+[catalog.card]
+id = "sku"
+productDisplayName = "title"
+gender = "gender"
+masterCategory = "category"
+subCategory = "subcategory"
+articleType = "type"
+baseColour = "colour"
+season = "season"
+year = "year"
+usage = "usage"
+
+[catalog.search]
+k = 50

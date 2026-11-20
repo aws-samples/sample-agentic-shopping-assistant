@@ -1,0 +1,40 @@
+# dependencies
+node_modules
+
+# IDEs and editors
+/.idea
+
+# IDE - VSCode
+.vscode/
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Local agent/assistant tooling state
+.claude/
+
+# CDK
+cdk.out/
+# Local infra config, copied from packages/infra/config/*.toml
+.toml
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Nuxt build output
+.nuxt/
+.output/
+
+# Local env files (the web app's template is packages/web/env/local.env)
+.env
+.env.local
+
+/artifacts/
+
+# Dataset evaluation results (raw judge output)
+packages/agent/evals/results/
